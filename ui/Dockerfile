@@ -1,6 +1,6 @@
-FROM mattf/storm-base
+FROM miradatv/storm-base
 
-MAINTAINER Matthew Farrellee <matt@cs.wisc.edu>
+MAINTAINER Oscar Morante <oscar.morante@mirada.tv>
 
 ADD start.sh /
 

@@ -15,6 +15,6 @@ if [ -n "$2" ]; then
    cat >> conf/storm.yaml <<EOF
 nimbus.host: "$2"
 EOF
-fi   
+fi
 
 cat conf/storm.yaml
