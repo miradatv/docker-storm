@@ -2,6 +2,7 @@
 
 cat >> conf/storm.yaml <<EOF
 storm.local.dir: "/tmp"
+storm.local.hostname: "$(hostname -i)"
 EOF
 
 if [ -n "$1" ]; then
