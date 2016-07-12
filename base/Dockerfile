@@ -7,3 +7,5 @@ RUN curl -s http://apache.mivzakim.net/storm/apache-storm-1.0.1/apache-storm-1.0
       mv /opt/apache-storm-1.0.1 /opt/apache-storm
 
 ADD configure.sh /
+ADD cluster.xml /opt/apache-storm/log4j2/cluster.xml
+ADD worker.xml /opt/apache-storm/log4j2/worker.xml
