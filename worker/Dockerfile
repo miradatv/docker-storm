@@ -1,4 +1,4 @@
-FROM miradatv/storm-base
+FROM storm-base
 
 MAINTAINER Oscar Morante <oscar.morante@mirada.tv>
 
