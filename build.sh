@@ -1,6 +1,6 @@
 #!/bin/bash
 
-STORM_VERSION="1.0.1.h"
+STORM_VERSION="1.0.1.b"
 
 if [ $# -lt 4 ] || [ $# -gt 5  ]; then
         echo "Usage:"
