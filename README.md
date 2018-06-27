@@ -1,3 +1,9 @@
+## Note
+Needed storm files are in: 
+```
+smb://madnas01/corporate/SDC/proyectos/LOGIQ/apache-storm/apache-storm-1.0.1.tar.gz
+```
+
 # Apache Storm images for Docker
 
 # Build

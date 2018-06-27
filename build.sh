@@ -1,27 +1,43 @@
-#!/bin/sh
+#!/bin/bash
 
-VERSION=1.0.5
+STORM_VERSION="1.0.1.h"
 
-export ECR=606039442951.dkr.ecr.us-east-1.amazonaws.com
+if [ $# -lt 4 ] || [ $# -gt 5  ]; then
+        echo "Usage:"
+        echo "------"
+        echo "build.sh <ECR URL> <PROFILE> <REGION> [<REPO>]"
+        echo "build.sh 891435880877.dkr.ecr.us-east-1.amazonaws.com atniECR us-east-1 mirada/logiq/ "
+        echo "build.sh 628220405432.dkr.ecr.us-west-2.amazonaws.com izziECR us-west-2 "
+        exit;
+fi
 
-docker build -t storm-base base --no-cache
-docker build -t storm-nimbus nimbus --no-cache
-docker build -t storm-worker worker --no-cache
-docker build -t storm-ui ui --no-cache
-docker tag storm-base $ECR/storm-base:$VERSION
-docker tag storm-nimbus $ECR/storm-nimbus:$VERSION
-docker tag storm-worker $ECR/storm-worker:$VERSION
-docker tag storm-ui $ECR/storm-ui:$VERSION
-docker tag storm-base $ECR/storm-base:latest
-docker tag storm-nimbus $ECR/storm-nimbus:latest
-docker tag storm-worker $ECR/storm-worker:latest
-docker tag storm-ui $ECR/storm-ui:latest
-docker push $ECR/storm-base:$VERSION
-docker push $ECR/storm-base:latest
-docker push $ECR/storm-nimbus:$VERSION
-docker push $ECR/storm-nimbus:latest
-docker push $ECR/storm-worker:$VERSION
-docker push $ECR/storm-worker:latest
-docker push $ECR/storm-ui:$VERSION
-docker push $ECR/storm-ui:latest
+ECR=$1
+PROFILE=$2
+REGION=$3
+REPO_PREFIX=$4
+
+# trim white spaces
+REPO_PREFIX="$(echo $REPO_PREFIX | tr -d '[:space:]')"
+
+if [ -n "$REPO_PREFIX" ]; then
+    FULL_ECR_PREFIX="$ECR/$REPO_PREFIX"
+else
+    FULL_ECR_PREFIX="$ECR"
+fi
+
+$(aws ecr get-login --no-include-email --region $REGION --profile $PROFILE)
+PROJECTS=( storm-base storm-ui storm-worker storm-nimbus )
+
+
+for PROJECT in "${PROJECTS[@]}"
+do
+    NAME="$(echo $PROJECT | cut -d '-' -f 2)"
+    REMOTE_NAME=$FULL_ECR_PREFIX/$PROJECT
+
+    docker build -t "$PROJECT" "$NAME"
+    docker tag "$PROJECT" "$REMOTE_NAME:$STORM_VERSION"
+    docker tag "$PROJECT" "$REMOTE_NAME:latest"
+    docker push $REMOTE_NAME:$STORM_VERSION
+    docker push $REMOTE_NAME:latest
+done
 
