@@ -1,13 +1,14 @@
 #!/bin/bash
 
-STORM_VERSION="1.0.1.b"
+STORM_VERSION="1.2.3"
 
 if [ $# -lt 4 ] || [ $# -gt 5  ]; then
         echo "Usage:"
         echo "------"
-        echo "build.sh <ECR URL> <PROFILE> <REGION> [<REPO>]"
-        echo "build.sh 891435880877.dkr.ecr.us-east-1.amazonaws.com atniECR us-east-1 mirada/logiq/ "
-        echo "build.sh 628220405432.dkr.ecr.us-west-2.amazonaws.com izziECR us-west-2 "
+        echo "./build.sh <ECR URL> <PROFILE> <REGION> [<REPO>]"
+        echo "./build.sh 891435880877.dkr.ecr.us-east-1.amazonaws.com atniECR us-east-1 mirada/logiq/ "
+        echo "./build.sh 628220405432.dkr.ecr.us-west-2.amazonaws.com izziECR us-west-2 \"\""
+	echo "./build.sh 159323910461.dkr.ecr.us-east-1.amazonaws.com skytelzapiECR us-east-1 mirada/logiq/"
         exit;
 fi
 
@@ -36,6 +37,7 @@ do
 
     docker build -t "$PROJECT" "$NAME"
     docker tag "$PROJECT" "$REMOTE_NAME:$STORM_VERSION"
+    echo "before tagging, version is $STORM_VERSION"
     docker tag "$PROJECT" "$REMOTE_NAME:latest"
     docker push $REMOTE_NAME:$STORM_VERSION
     docker push $REMOTE_NAME:latest
